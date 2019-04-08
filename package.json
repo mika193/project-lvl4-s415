@@ -2,18 +2,17 @@
   "name": "slack",
   "version": "0.0.1",
   "description": "small slack analog",
-  "main": "dist/index.js",
-  "bin": {
-    "hexlet": "dist/bin/slack.js"
-  },
+  "main": "dist/bin/slack.js",
   "engines": {
-    "node": "9"
+    "node": "^8.11.1",
+    "npm": "^6.9.0"
   },
   "scripts": {
     "test": "jest",
     "build-server": "babel server --out-dir dist --source-maps inline",
     "build-app": "npx webpack -p --env production",
     "build": "npm run build-app && npm run build-server",
+    "start": "node dist/bin/slack.js",
     "postinstall": "npm run build"
   },
   "repository": {
