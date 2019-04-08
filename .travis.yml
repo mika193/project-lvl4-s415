@@ -1,0 +1,10 @@
+language: node_js
+
+rvm:
+  - 2.2.0
+
+node_js:
+  - stable
+
+script:
+  - make lint
