@@ -1,60 +1,42 @@
+import faker from 'faker';
+import cookies from 'js-cookie';
+import io from 'socket.io-client';
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { uniqueId } from 'lodash';
+import { render } from 'react-dom';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import reducers from './reducers';
+import App from './components/App';
+import * as actions from './actions';
 
-class App extends React.Component {
-  state = {
-    currentMessage: '',
-    activeChanel: 'general',
-    messages: [],
+/* eslint-disable no-underscore-dangle */
+const store = createStore(
+  reducers,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+);
+
+
+const initApp = ({ channels, messages, currentChannelId }) => {
+  if (!cookies.get('user')) {
+    cookies.set('user', faker.name.findName());
   }
 
-  onMessageTyping = ({ target: { value } }) => {
-    this.setState({ currentMessage: value });
-  }
+  const socket = io();
+  socket.on('newMessage', (message) => {
+    console.log(message.data.attributes);
+    store.dispatch(actions.addMessage({ message: message.data.attributes }));
+  });
 
-  sendMessage = (e) => {
-    e.preventDefault();
-    const { messages, currentMessage } = this.state;
-    this.setState({ messages: [...messages, currentMessage], currentMessage: '' });
-  }
+  messages.forEach(message => store.dispatch(actions.addMessage({ message })));
+  channels.forEach(channel => store.dispatch(actions.addChannel({ channel })));
+  store.dispatch(actions.setCurentChanelId({ currentChannelId }));
 
-  render() {
-    const { channels } = this.props;
-    const { currentMessage, activeChanel, messages } = this.state;
-
-    return (
-      <div className="d-flex h-100">
-        <ul className="list-group col-3">
-          {channels.map(({ id, name }) => (
-            <li className="list-group-item list-group-item-action" key={id}>
-              <button type="button" className="btn btn-link">{name}</button>
-            </li>
-          ))}
-        </ul>
-        <div className="col-9 flex-grow-1 d-flex flex-column h-100">
-          <div className="flex-grow-1 jumbotron pt-4">
-            <h3 className="mb-3">{`#${activeChanel}`}</h3>
-            {messages.map(message => <p key={uniqueId()}>{message}</p>)}
-          </div>
-          <form className="pt-3 d-flex" onSubmit={this.sendMessage}>
-            <input
-              type="text"
-              name="message"
-              className="form-control"
-              id="message"
-              placeholder="Message #general"
-              onChange={this.onMessageTyping}
-              value={currentMessage}
-            />
-            <button className="btn btn-primary ml-1" type="submit">Отправить</button>
-          </form>
-        </div>
-      </div>
-    );
-  }
-}
-
-export default (channels) => {
-  ReactDOM.render(<App channels={channels} />, document.getElementById('chat'));
+  render(
+    <Provider store={store}>
+      <App />
+    </Provider>,
+    document.getElementById('chat'),
+  );
 };
+
+export default initApp;
