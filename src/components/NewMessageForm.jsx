@@ -53,7 +53,7 @@ class MessagesBlock extends React.Component {
           placeholder="Message #general"
         />
         <button className="btn btn-primary ml-1" disabled={submitting} type="submit">
-          {submitting ? 'Отправляется..' : 'Отправить'}
+          {submitting ? 'Отправка..' : 'Отправить'}
         </button>
       </form>
     );
