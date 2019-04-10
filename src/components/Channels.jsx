@@ -7,14 +7,20 @@ const mapStateToProps = (state) => {
   return { channels };
 };
 
-const Channels = ({ channels }) => (
-  <ul className="list-group col-3">
-    {channels.map(({ id, name }) => (
-      <li className="list-group-item list-group-item-action" key={id}>
-        <button type="button" className="btn btn-link">{name}</button>
-      </li>
-    ))}
-  </ul>
-);
+@connect(mapStateToProps)
+class Channels extends React.Component {
+  render() {
+    const { channels } = this.props;
+    return (
+      <ul className="list-group col-3">
+        {channels.map(({ id, name }) => (
+          <li className="list-group-item list-group-item-action" key={id}>
+            <button type="button" className="btn btn-link">{name}</button>
+          </li>
+        ))}
+      </ul>
+    );
+  }
+}
 
-export default connect(mapStateToProps)(Channels);
+export default Channels;
