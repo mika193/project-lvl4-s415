@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { channelsSelector } from '../selectors';
 
 const mapStateToProps = (state) => {
-  const { channels: { byId, allIds } } = state;
-  const channels = allIds.map(id => byId[id]);
+  const channels = channelsSelector(state);
   return { channels };
 };
 

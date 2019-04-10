@@ -1,19 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import cookies from 'js-cookie';
 import * as actions from '../actions';
+import UserContext from '../context';
 
 const mapStateToProps = (state) => {
-  const { currentMessage, currentChanelID } = state;
-  return { currentMessage, currentChanelID };
+  const { currentMessage, currentChannelId } = state;
+  return { currentMessage, currentChannelId };
 };
 
 const actionCreators = {
   updateNewMessageText: actions.updateNewMessageText,
 };
-
-const userContext = React.createContext(cookies.get('user'));
 
 class MessagesBlock extends React.Component {
   onMessageTyping = ({ target: { value } }) => {
@@ -25,7 +23,6 @@ class MessagesBlock extends React.Component {
     e.preventDefault();
     const sendData = async () => {
       const user = this.context;
-      console.log(user);
       const { currentChannelId, currentMessage } = this.props;
       const data = {
         data: {
@@ -34,8 +31,6 @@ class MessagesBlock extends React.Component {
       };
       try {
         axios.post(`http://localhost:4000/api/v1/channels/${currentChannelId}/messages`, data);
-        /* const { attributes: message } = request.data.data;
-        this.setState({ messages: [...messages, message], currentMessage: '' }); */
       } catch (err) {
         console.log(err);
         sendData();
@@ -64,5 +59,6 @@ class MessagesBlock extends React.Component {
   }
 }
 
-MessagesBlock.contextType = userContext;
+MessagesBlock.contextType = UserContext;
+
 export default connect(mapStateToProps, actionCreators)(MessagesBlock);

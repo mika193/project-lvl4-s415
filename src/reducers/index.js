@@ -22,9 +22,9 @@ const channels = handleActions({
   },
 }, { byId: {}, allIds: [] });
 
-const currentChanelID = handleActions({
-  [actions.setCurentChanelId](state, { payload: { currentChannelId } }) {
-    return currentChannelId;
+const currentChannelId = handleActions({
+  [actions.setCurentChannelId](state, { payload: { id } }) {
+    return id;
   },
 }, '');
 
@@ -40,6 +40,6 @@ const currentMessage = handleActions({
 export default combineReducers({
   messages,
   channels,
-  currentChanelID,
+  currentChannelId,
   currentMessage,
 });
