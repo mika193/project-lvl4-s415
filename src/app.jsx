@@ -15,6 +15,18 @@ const initApp = ({ channels, messages, currentChannelId }) => {
   );
 
   const socket = io();
+
+  socket.on('connect', () => {
+    store.dispatch(actions.setSocketConnectionStatus({ status: 'connected' }));
+  });
+
+  socket.on('disconnect', (reason) => {
+    store.dispatch(actions.setSocketConnectionStatus({ status: 'disconnected' }));
+    if (reason === 'io server disconnect') {
+      socket.connect();
+    }
+  });
+
   socket.on('newMessage', (message) => {
     store.dispatch(actions.addMessage({ message: message.data.attributes }));
   });

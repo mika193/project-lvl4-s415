@@ -29,9 +29,16 @@ const currentChannelId = handleActions({
   },
 }, '');
 
+const socketConnectionStatus = handleActions({
+  [actions.setSocketConnectionStatus](state, { payload: { status } }) {
+    return status;
+  },
+}, 'disconnected');
+
 export default combineReducers({
   messages,
   channels,
   currentChannelId,
+  socketConnectionStatus,
   form: formReducer,
 });
