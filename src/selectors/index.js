@@ -20,3 +20,13 @@ export const channelsSelector = createSelector(
   [getChannelsById, getChannelsIds],
   (byId, allIds) => allIds.map(id => byId[id]),
 );
+
+export const isCurrentChannelRemovable = createSelector(
+  [getChannelsById, getCurrentChannelId],
+  (byId, id) => byId[id].removable,
+);
+
+export const getCurrentChannelName = createSelector(
+  [getChannelsById, getCurrentChannelId],
+  (byId, id) => byId[id].name,
+);

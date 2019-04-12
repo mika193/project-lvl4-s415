@@ -31,6 +31,16 @@ const initApp = ({ channels, messages, currentChannelId }) => {
     store.dispatch(actions.addMessage({ message: message.data.attributes }));
   });
 
+  socket.on('newChannel', (channel) => {
+    store.dispatch(actions.addChannel({ channel: channel.data.attributes }));
+    store.dispatch(actions.setCurentChannelId({ id: channel.data.attributes.id }));
+  });
+
+  socket.on('removeChannel', (data) => {
+    store.dispatch(actions.setCurentChannelId({ id: 1 }));
+    store.dispatch(actions.removeChannel({ id: data.data.id }));
+  });
+
   messages.forEach(message => store.dispatch(actions.addMessage({ message })));
   channels.forEach(channel => store.dispatch(actions.addChannel({ channel })));
   store.dispatch(actions.setCurentChannelId({ id: currentChannelId }));
