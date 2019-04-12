@@ -3,22 +3,20 @@ import { connect } from 'react-redux';
 import cn from 'classnames';
 import { channelsSelector, isCurrentChannelRemovable } from '../selectors';
 import * as actions from '../actions';
-import AddChannelForm from './AddChannelForm';
-import RemoveChannelSubmitWindow from './RemoveChannelSubmittWindow';
+import ModalWindow from './modals/ModalWindow';
 
 const mapStateToProps = (state) => {
-  const { currentChannelId, addChannelFormStatus } = state;
+  const { currentChannelId, modal } = state;
   const channels = channelsSelector(state);
   const removable = isCurrentChannelRemovable(state);
   return {
-    channels, currentChannelId, addChannelFormStatus, removable,
+    channels, currentChannelId, modal, removable,
   };
 };
 
 const actionCreators = {
   setCurentChannelId: actions.setCurentChannelId,
-  addChannelFormOpen: actions.addChannelFormOpen,
-  removeChannelSubmitWindowOpen: actions.removeChannelSubmitWindowOpen,
+  openModal: actions.openModal,
 };
 
 @connect(mapStateToProps, actionCreators)
@@ -45,33 +43,27 @@ class Channels extends React.Component {
     );
   }
 
-  openAddChannelForm = (e) => {
+  openModal = type => (e) => {
     e.preventDefault();
-    const { addChannelFormOpen } = this.props;
-    addChannelFormOpen();
-  }
-
-  removeChannelClick = (e) => {
-    e.preventDefault();
-    const { removeChannelSubmitWindowOpen } = this.props;
-    removeChannelSubmitWindowOpen();
+    const { openModal } = this.props;
+    openModal({ type });
   }
 
   render() {
-    const { channels, addChannelFormStatus, removable } = this.props;
+    const { channels, modal, removable } = this.props;
     return (
-      <div className="col-3">
+      <div className="col-3 align-self-stretch d-flex flex-column">
         <div className="list-group mb-4">
           {channels.map(this.renderChannel)}
         </div>
-        {addChannelFormStatus === 'opened' ? <AddChannelForm />
-          : <button type="button" className="btn btn-outline-secondary" onClick={this.openAddChannelForm}>Add a Channel</button>}
+        <button type="button" className="btn btn-outline-secondary mb-2" onClick={this.openModal('addChannel')}>Add a Channel</button>
         {removable && (
-          <>
-            <button type="button" className="btn btn-outline-secondary" onClick={this.removeChannelClick}>Remove current channel</button>
-            <RemoveChannelSubmitWindow />
-          </>
+          <div className="d-flex mt-auto">
+            <button type="button" className="btn btn-outline-secondary btn-sm mr-1" onClick={this.openModal('removeChannel')}>Remove channel</button>
+            <button type="button" className="btn btn-outline-secondary btn-sm" onClick={this.openModal('renameChannel')}>Rename channel</button>
+          </div>
         )}
+        {modal.status === 'opened' && <ModalWindow />}
       </div>
     );
   }

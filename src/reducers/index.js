@@ -53,30 +53,31 @@ const socketConnectionStatus = handleActions({
   },
 }, 'disconnected');
 
-const addChannelFormStatus = handleActions({
-  [actions.addChannelFormOpen]() {
-    return 'opened';
+const modal = handleActions({
+  [actions.openModal](state, { payload: { type } }) {
+    return {
+      ...state,
+      status: 'opened',
+      type,
+    };
   },
-  [actions.addChannelFormClose]() {
-    return 'closed';
+  [actions.closeModal]() {
+    return {
+      error: null,
+      status: 'closed',
+      type: '',
+    };
   },
-}, 'closed');
-
-const removeChannelSubmitWindowStatus = handleActions({
-  [actions.submitingRemoveChannelWindowOpen]() {
-    return 'opened';
+  [actions.setModalError](state, { payload: { error } }) {
+    return { ...state, error };
   },
-  [actions.submitingRemoveChannelWindowClose]() {
-    return 'closed';
-  },
-}, 'closed');
+}, { status: 'closed', type: '', error: null });
 
 export default combineReducers({
   messages,
   channels,
   currentChannelId,
   socketConnectionStatus,
-  addChannelFormStatus,
-  removeChannelSubmitWindowStatus,
+  modal,
   form: formReducer,
 });
