@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions';
 import AddChannel from './AddChannel';
 import RemoveChannel from './RemoveChannel';
+import RenameChannel from './RenameChannel';
 
 const mapStateToProps = (state) => {
   const { modal } = state;
@@ -17,6 +18,7 @@ const actionCreators = {
 const modalMap = {
   addChannel: <AddChannel />,
   removeChannel: <RemoveChannel />,
+  renameChannel: <RenameChannel />,
 };
 
 @connect(mapStateToProps, actionCreators)

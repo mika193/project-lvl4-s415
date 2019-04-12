@@ -59,8 +59,8 @@ class Channels extends React.Component {
         <button type="button" className="btn btn-outline-secondary mb-2" onClick={this.openModal('addChannel')}>Add a Channel</button>
         {removable && (
           <div className="d-flex mt-auto">
-            <button type="button" className="btn btn-outline-secondary btn-sm mr-1" onClick={this.openModal('removeChannel')}>Remove channel</button>
-            <button type="button" className="btn btn-outline-secondary btn-sm" onClick={this.openModal('renameChannel')}>Rename channel</button>
+            <button type="button" className="btn btn-danger btn-sm mr-1" onClick={this.openModal('removeChannel')}>Remove channel</button>
+            <button type="button" className="btn btn-warning btn-sm" onClick={this.openModal('renameChannel')}>Rename channel</button>
           </div>
         )}
         {modal.status === 'opened' && <ModalWindow />}

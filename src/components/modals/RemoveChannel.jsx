@@ -19,7 +19,7 @@ const actionCreators = {
 
 @connect(mapStateToProps, actionCreators)
 class RemoveChannel extends React.Component {
-  deleteChannel = async (e) => {
+  removeChannel = async (e) => {
     e.preventDefault();
     const { closeModal, currentChannelId, setModalError } = this.props;
     try {
@@ -53,8 +53,8 @@ class RemoveChannel extends React.Component {
           <Button variant="secondary" onClick={closeModal}>
             Cancel
           </Button>
-          <Button variant="primary" onClick={this.deleteChannel}>
-            Delete
+          <Button variant="primary" onClick={this.removeChannel}>
+            Remove
           </Button>
         </Modal.Footer>
       </>

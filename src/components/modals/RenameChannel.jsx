@@ -4,26 +4,30 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import { Field, reduxForm, SubmissionError } from 'redux-form';
 import * as actions from '../../actions';
-import { addChannelUrl } from '../../routes';
+import { renameChannelUrl } from '../../routes';
+import { getCurrentChannelName } from '../../selectors';
 
-const mapStateToProps = state => state;
+const mapStateToProps = (state) => {
+  const channelName = getCurrentChannelName(state);
+  return { channelName };
+};
 
 const actionCreators = {
   closeModal: actions.closeModal,
 };
 
 @reduxForm({
-  form: 'addChannel',
+  form: 'renameChannel',
 })
 @connect(mapStateToProps, actionCreators)
-class AddChannel extends React.Component {
+class RenameChannel extends React.Component {
   closeWindow = (e) => {
     e.preventDefault();
     const { closeModal } = this.props;
     closeModal();
   }
 
-  addChannel = async (values) => {
+  renameChannel = async (values) => {
     const { reset, closeModal } = this.props;
     const { channel } = values;
     const data = {
@@ -33,7 +37,7 @@ class AddChannel extends React.Component {
     };
 
     try {
-      await axios.post(addChannelUrl(), data);
+      await axios.post(renameChannelUrl(), data);
       reset();
       closeModal();
     } catch (err) {
@@ -43,18 +47,18 @@ class AddChannel extends React.Component {
 
   render() {
     const {
-      closeModal, handleSubmit, submitting, error,
+      closeModal, handleSubmit, submitting, error, channelName,
     } = this.props;
 
     return (
       <>
         <Modal.Header>
-          <Modal.Title>Add channel</Modal.Title>
+          <Modal.Title>{`Rename #${channelName}`}</Modal.Title>
         </Modal.Header>
-        <form onSubmit={handleSubmit(this.addChannel)}>
+        <form onSubmit={handleSubmit(this.renameChannel)}>
           <Modal.Body>
             { error
-              ? (<p>Could not add channel. Check the connection and try again later.</p>)
+              ? (<p>Could not rename channel. Check the connection and try again later.</p>)
               : (
                 <Field
                   type="text"
@@ -71,7 +75,7 @@ class AddChannel extends React.Component {
               Cancel
             </Button>
             <Button variant="primary" disabled={submitting} type="submit">
-              {submitting ? 'Adding.....' : 'Add channel'}
+              {submitting ? 'Renaming.....' : 'Rename channel'}
             </Button>
           </Modal.Footer>
         </form>
@@ -80,4 +84,4 @@ class AddChannel extends React.Component {
   }
 }
 
-export default AddChannel;
+export default RenameChannel;
