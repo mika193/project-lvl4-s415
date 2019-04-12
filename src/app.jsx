@@ -41,6 +41,10 @@ const initApp = ({ channels, messages, currentChannelId }) => {
     store.dispatch(actions.removeChannel({ id: data.data.id }));
   });
 
+  socket.on('renameChannel', (channel) => {
+    store.dispatch(actions.renameChannel({ channel: channel.data.attributes }));
+  });
+
   messages.forEach(message => store.dispatch(actions.addMessage({ message })));
   channels.forEach(channel => store.dispatch(actions.addChannel({ channel })));
   store.dispatch(actions.setCurentChannelId({ id: currentChannelId }));

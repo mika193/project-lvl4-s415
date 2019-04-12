@@ -8,8 +8,9 @@ import { renameChannelUrl } from '../../routes';
 import { getCurrentChannelName } from '../../selectors';
 
 const mapStateToProps = (state) => {
+  const { currentChannelId } = state;
   const channelName = getCurrentChannelName(state);
-  return { channelName };
+  return { channelName, currentChannelId };
 };
 
 const actionCreators = {
@@ -28,7 +29,7 @@ class RenameChannel extends React.Component {
   }
 
   renameChannel = async (values) => {
-    const { reset, closeModal } = this.props;
+    const { reset, closeModal, currentChannelId } = this.props;
     const { channel } = values;
     const data = {
       data: {
@@ -37,7 +38,7 @@ class RenameChannel extends React.Component {
     };
 
     try {
-      await axios.post(renameChannelUrl(), data);
+      await axios.patch(renameChannelUrl(currentChannelId), data);
       reset();
       closeModal();
     } catch (err) {
