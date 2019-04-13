@@ -23,11 +23,23 @@ const contextType = (target) => {
 })
 @contextType
 class MessagesBlock extends React.Component {
+  componentDidMount() {
+    this.focusField();
+  }
+
+  componentDidUpdate() {
+    this.focusField();
+  }
+
+  focusField = () => {
+    const field = this.input.getRenderedComponent();
+    field.focus();
+  }
+
   sendMessage = async (values) => {
     const user = this.context;
-    const { reset } = this.props;
+    const { reset, currentChannelId } = this.props;
     const { message } = values;
-    const { currentChannelId } = this.props;
     const data = {
       data: {
         attributes: { author: user, content: message },
@@ -38,7 +50,6 @@ class MessagesBlock extends React.Component {
       await axios.post(addMessageUrl(currentChannelId), data);
       reset();
     } catch (err) {
-      console.log(err);
       throw new SubmissionError({ _error: err.message });
     }
   };
@@ -56,6 +67,8 @@ class MessagesBlock extends React.Component {
           className="form-control col-10"
           component="input"
           placeholder={`Message #${channelName}`}
+          ref={(input) => { (this.input = input); }}
+          forwardRef
         />
         <button className="btn btn-primary ml-1 col-2" disabled={submitting} type="submit">
           {submitting ? 'Sending.....' : 'Send message'}

@@ -7,38 +7,44 @@ import { getCurrentChannelName } from '../../selectors';
 import { removeChannelUrl } from '../../routes';
 
 const mapStateToProps = (state) => {
-  const { currentChannelId, modal: { error } } = state;
+  const { currentChannelId, requestState } = state;
   const channelName = getCurrentChannelName(state);
-  return { currentChannelId, channelName, error };
+  return { currentChannelId, channelName, requestState };
 };
 
 const actionCreators = {
   closeModal: actions.closeModal,
-  setModalError: actions.setModalError,
+  setRequestError: actions.setRequestError,
+  startRequest: actions.startRequest,
+  finishRequest: actions.finishRequest,
 };
 
 @connect(mapStateToProps, actionCreators)
 class RemoveChannel extends React.Component {
   removeChannel = async (e) => {
     e.preventDefault();
-    const { closeModal, currentChannelId, setModalError } = this.props;
+    const {
+      closeModal, currentChannelId, setRequestError, startRequest, finishRequest,
+    } = this.props;
+    startRequest();
     try {
       await axios.delete(removeChannelUrl(currentChannelId));
+      finishRequest();
       closeModal();
     } catch (err) {
-      setModalError({ error: err });
+      setRequestError();
     }
   }
 
   render() {
-    const { closeModal, channelName, error } = this.props;
+    const { closeModal, channelName, requestState } = this.props;
     return (
       <>
         <Modal.Header>
           <Modal.Title>{`Delete #${channelName}`}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          { error
+          { requestState === 'error'
             ? (<p>Could not delete channel. Check the connection and try again later.</p>)
             : (
               <p>
@@ -54,7 +60,7 @@ class RemoveChannel extends React.Component {
             Cancel
           </Button>
           <Button variant="primary" onClick={this.removeChannel}>
-            Remove
+            {requestState === 'requested' ? 'Removing......' : 'Remove channel'}
           </Button>
         </Modal.Footer>
       </>

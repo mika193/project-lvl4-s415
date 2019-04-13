@@ -58,6 +58,7 @@
     "lodash": "^4.17.11",
     "merge": "^1.2.1",
     "react": "^16.6.3",
+    "react-autofocus": "^0.2.0",
     "react-bootstrap": "^1.0.0-beta.3",
     "react-detect-offline": "^2.3.0",
     "react-dom": "^16.6.3",

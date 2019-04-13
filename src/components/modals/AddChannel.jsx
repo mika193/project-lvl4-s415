@@ -17,6 +17,19 @@ const actionCreators = {
 })
 @connect(mapStateToProps, actionCreators)
 class AddChannel extends React.Component {
+  componentDidMount() {
+    this.focusField();
+  }
+
+  componentDidUpdate() {
+    this.focusField();
+  }
+
+  focusField = () => {
+    const field = this.input.getRenderedComponent();
+    field.focus();
+  }
+
   closeWindow = (e) => {
     e.preventDefault();
     const { closeModal } = this.props;
@@ -60,8 +73,10 @@ class AddChannel extends React.Component {
                   type="text"
                   name="channel"
                   className="form-control col-12 mb-2"
-                  component="input"
                   placeholder="Enter new channel name..."
+                  component="input"
+                  ref={(input) => { (this.input = input); }}
+                  forwardRef
                 />
               )
             }

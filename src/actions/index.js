@@ -9,4 +9,6 @@ export const renameChannel = createAction('CHANNEL_RENAME');
 export const setSocketConnectionStatus = createAction('SOCKET_CONNECTION_STATUS_SET');
 export const openModal = createAction('MODAL_OPEN');
 export const closeModal = createAction('MODAL_CLOSE');
-export const setModalError = createAction('MODAL_ERROR_SET');
+export const setRequestError = createAction('REQUEST_ERROR_SET');
+export const startRequest = createAction('REQUEST_START');
+export const finishRequest = createAction('REQUEST_FINISH');

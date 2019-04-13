@@ -22,6 +22,19 @@ const actionCreators = {
 })
 @connect(mapStateToProps, actionCreators)
 class RenameChannel extends React.Component {
+  componentDidMount() {
+    this.focusField();
+  }
+
+  componentDidUpdate() {
+    this.focusField();
+  }
+
+  focusField = () => {
+    const field = this.input.getRenderedComponent();
+    field.focus();
+  }
+
   closeWindow = (e) => {
     e.preventDefault();
     const { closeModal } = this.props;
@@ -67,6 +80,8 @@ class RenameChannel extends React.Component {
                   className="form-control col-12 mb-2"
                   component="input"
                   placeholder="Enter new channel name..."
+                  ref={(input) => { (this.input = input); }}
+                  forwardRef
                 />
               )
             }

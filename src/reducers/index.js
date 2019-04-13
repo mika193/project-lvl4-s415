@@ -63,22 +63,29 @@ const socketConnectionStatus = handleActions({
 const modal = handleActions({
   [actions.openModal](state, { payload: { type } }) {
     return {
-      ...state,
       status: 'opened',
       type,
     };
   },
   [actions.closeModal]() {
     return {
-      error: null,
       status: 'closed',
       type: '',
     };
   },
-  [actions.setModalError](state, { payload: { error } }) {
-    return { ...state, error };
+}, { status: 'closed', type: '' });
+
+const requestState = handleActions({
+  [actions.setRequestError]() {
+    return 'error';
   },
-}, { status: 'closed', type: '', error: null });
+  [actions.startRequest]() {
+    return 'requested';
+  },
+  [actions.finishRequest]() {
+    return 'finished';
+  },
+}, 'finished');
 
 export default combineReducers({
   messages,
@@ -86,5 +93,6 @@ export default combineReducers({
   currentChannelId,
   socketConnectionStatus,
   modal,
+  requestState,
   form: formReducer,
 });
