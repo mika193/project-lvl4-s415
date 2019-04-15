@@ -26,8 +26,10 @@ class AddChannel extends React.Component {
   }
 
   focusField = () => {
-    const field = this.input.getRenderedComponent();
-    field.focus();
+    if (this.input) {
+      const field = this.input.getRenderedComponent();
+      field.focus();
+    }
   }
 
   closeWindow = (e) => {
