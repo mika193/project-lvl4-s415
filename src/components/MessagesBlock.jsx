@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { uniqueId } from 'lodash';
+import ScrollToBottom from 'react-scroll-to-bottom';
 import { getCurrentChannelMessages } from '../selectors';
-import ScrollBottom from './ScrollBottom';
 
 const mapStateToProps = (state) => {
   const { currentChannelId, channels: { byId: allChannels } } = state;
@@ -16,16 +16,16 @@ class MessagesBlock extends React.Component {
   render() {
     const { messages, activeChannel } = this.props;
     return (
-      <div className="flex-grow-1 jumbotron pt-3 pb-3 pr-2 overflow-auto position-relative mh-100">
-        <h3 className="mb-3 position-absolute channel-name">{`#${activeChannel}`}</h3>
-        <ScrollBottom>
+      <div className="jumbotron pt-3 pb-3 pr-2 h-75 d-flex flex-column">
+        <h3 className="mb-3">{`#${activeChannel}`}</h3>
+        <ScrollToBottom className="w-auto h-75 flex-grow-1">
           {messages.map(message => (
             <div key={uniqueId()}>
               <h6>{message.author}</h6>
               <p>{message.content}</p>
             </div>
           ))}
-        </ScrollBottom>
+        </ScrollToBottom>
       </div>
     );
   }

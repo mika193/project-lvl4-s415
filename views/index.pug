@@ -1,12 +1,10 @@
 doctype html
-html(lang="en")
+html(lang="en").h-100
   head
     title= Title
     script.
       var gon = !{JSON.stringify(gon)};
-  body.vh-100
-    nav.navbar.navbar-expand-lg.navbar-light.bg-faded.container
-      a.navbar-brand(href="/") Chat
-    .container.vh-85
+  body.h-100.p-4
+    .container.h-100
       #chat.h-100
     script(src='/assets/main.js')

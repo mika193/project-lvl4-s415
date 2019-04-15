@@ -59,8 +59,8 @@ class MessagesBlock extends React.Component {
       handleSubmit, submitting, error, channelName,
     } = this.props;
     return (
-      <form className="pt-3 d-flex position-relative pt-4" onSubmit={handleSubmit(this.sendMessage)}>
-        {error && <div className="ml-3 position-absolute send-error-message text-danger">The message was not sent, please try again</div>}
+      <form className="pt-4 d-flex position-relative pt-4" onSubmit={handleSubmit(this.sendMessage)}>
+        {error && <div className="ml-3 popover text-danger p-1 mw-100">The message was not sent, please try again</div>}
         <Field
           type="text"
           name="message"
