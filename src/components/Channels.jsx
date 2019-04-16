@@ -1,8 +1,7 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import cn from 'classnames';
 import { channelsSelector, isCurrentChannelRemovable } from '../selectors';
-import * as actions from '../actions';
+import connect from '../connect';
 import ModalWindow from './modals/ModalWindow';
 
 const mapStateToProps = (state) => {
@@ -14,19 +13,12 @@ const mapStateToProps = (state) => {
   };
 };
 
-const actionCreators = {
-  setCurentChannelId: actions.setCurentChannelId,
-  openModal: actions.openModal,
-};
-
-@connect(mapStateToProps, actionCreators)
+@connect(mapStateToProps)
 class Channels extends React.Component {
   channelClick = id => (e) => {
     e.preventDefault();
-    const { setCurentChannelId, currentChannelId } = this.props;
-    if (currentChannelId !== id) {
-      setCurentChannelId({ id });
-    }
+    const { setCurentChannelId } = this.props;
+    setCurentChannelId({ id });
   }
 
   renderChannel = ({ id, name }) => {

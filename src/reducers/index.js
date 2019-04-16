@@ -75,17 +75,17 @@ const modal = handleActions({
   },
 }, { status: 'closed', type: '' });
 
-const requestState = handleActions({
-  [actions.setRequestError]() {
-    return 'error';
-  },
-  [actions.startRequest]() {
+const channelRemovingState = handleActions({
+  [actions.removeChannelRequest]() {
     return 'requested';
   },
-  [actions.finishRequest]() {
+  [actions.removeChannelFailure]() {
+    return 'failed';
+  },
+  [actions.removeChannelSuccess]() {
     return 'finished';
   },
-}, 'finished');
+}, 'none');
 
 export default combineReducers({
   messages,
@@ -93,6 +93,6 @@ export default combineReducers({
   currentChannelId,
   socketConnectionStatus,
   modal,
-  requestState,
+  channelRemovingState,
   form: formReducer,
 });

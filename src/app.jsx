@@ -2,16 +2,31 @@ import io from 'socket.io-client';
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
+import thunk from 'redux-thunk';
+import faker from 'faker';
+import cookies from 'js-cookie';
 import reducers from './reducers';
 import App from './components/App';
 import * as actions from './actions';
+import { UserContext } from './context';
+
 
 const initApp = ({ channels, messages, currentChannelId }) => {
   /* eslint-disable no-underscore-dangle */
+  const defaultChannelId = 1;
+  if (!cookies.get('user')) {
+    cookies.set('user', faker.name.findName());
+  }
+
+  const user = cookies.get('user');
+
   const store = createStore(
     reducers,
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+    compose(
+      applyMiddleware(thunk),
+      window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+    ),
   );
 
   const socket = io();
@@ -37,7 +52,7 @@ const initApp = ({ channels, messages, currentChannelId }) => {
   });
 
   socket.on('removeChannel', (data) => {
-    store.dispatch(actions.setCurentChannelId({ id: 1 }));
+    store.dispatch(actions.setCurentChannelId({ id: defaultChannelId }));
     store.dispatch(actions.removeChannel({ id: data.data.id }));
   });
 
@@ -51,7 +66,9 @@ const initApp = ({ channels, messages, currentChannelId }) => {
 
   render(
     <Provider store={store}>
-      <App />
+      <UserContext.Provider value={user}>
+        <App />
+      </UserContext.Provider>
     </Provider>,
     document.getElementById('chat'),
   );

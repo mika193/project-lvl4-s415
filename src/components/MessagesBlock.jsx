@@ -1,8 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { uniqueId } from 'lodash';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import { getCurrentChannelMessages } from '../selectors';
+import connect from '../connect';
 
 const mapStateToProps = (state) => {
   const { currentChannelId, channels: { byId: allChannels } } = state;

@@ -1,10 +1,10 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import axios from 'axios';
 import { Field, reduxForm, SubmissionError } from 'redux-form';
-import UserContext from '../context';
+import { contextDecorator } from '../context';
 import { getCurrentChannelName } from '../selectors';
 import { addMessageUrl } from '../routes';
+import connect from '../connect';
 
 const mapStateToProps = (state) => {
   const { currentMessage, currentChannelId } = state;
@@ -12,16 +12,11 @@ const mapStateToProps = (state) => {
   return { currentMessage, currentChannelId, channelName };
 };
 
-const contextType = (target) => {
-  // eslint-disable-next-line no-param-reassign
-  target.contextType = UserContext;
-};
-
 @connect(mapStateToProps)
 @reduxForm({
   form: 'newMessage',
 })
-@contextType
+@contextDecorator
 class MessagesBlock extends React.Component {
   componentDidMount() {
     this.focusField();
@@ -37,8 +32,7 @@ class MessagesBlock extends React.Component {
   }
 
   sendMessage = async (values) => {
-    const user = this.context;
-    const { reset, currentChannelId } = this.props;
+    const { reset, currentChannelId, user } = this.props;
     const { message } = values;
     const data = {
       data: {

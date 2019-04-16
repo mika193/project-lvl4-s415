@@ -1,7 +1,6 @@
 import React from 'react';
 import { Modal } from 'react-bootstrap';
-import { connect } from 'react-redux';
-import * as actions from '../../actions';
+import connect from '../../connect';
 import AddChannel from './AddChannel';
 import RemoveChannel from './RemoveChannel';
 import RenameChannel from './RenameChannel';
@@ -11,17 +10,13 @@ const mapStateToProps = (state) => {
   return { modal };
 };
 
-const actionCreators = {
-  closeModal: actions.closeModal,
-};
-
 const modalMap = {
   addChannel: <AddChannel />,
   removeChannel: <RemoveChannel />,
   renameChannel: <RenameChannel />,
 };
 
-@connect(mapStateToProps, actionCreators)
+@connect(mapStateToProps)
 class ModalWindow extends React.Component {
   closeWindow = (e) => {
     e.preventDefault();

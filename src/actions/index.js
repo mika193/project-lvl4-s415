@@ -1,4 +1,6 @@
 import { createAction } from 'redux-actions';
+import axios from 'axios';
+import * as routes from '../routes';
 
 export const addMessage = createAction('MESSAGE_ADD');
 export const updateNewMessageText = createAction('NEW_MESSAGE_TEXT_UPDATE');
@@ -10,5 +12,39 @@ export const setSocketConnectionStatus = createAction('SOCKET_CONNECTION_STATUS_
 export const openModal = createAction('MODAL_OPEN');
 export const closeModal = createAction('MODAL_CLOSE');
 export const setRequestError = createAction('REQUEST_ERROR_SET');
-export const startRequest = createAction('REQUEST_START');
-export const finishRequest = createAction('REQUEST_FINISH');
+
+export const removeChannelRequest = createAction('CHANNEL_REMOVE_REQUEST');
+export const removeChannelSuccess = createAction('CHANNEL_REMOVE_SUCCESS');
+export const removeChannelFailure = createAction('CHANNEL_REMOVE_FAILURE');
+
+export const makeAddChannelRequest = data => async (dispatch) => {
+  try {
+    const { addChannelUrl } = routes;
+    await axios.post(addChannelUrl(), data);
+    dispatch(closeModal());
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const makeRenameChannelRequest = (channelId, data) => async (dispatch) => {
+  try {
+    const { renameChannelUrl } = routes;
+    await await axios.patch(renameChannelUrl(channelId), data);
+    dispatch(closeModal());
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const makeRemoveChannelRequest = channelId => async (dispatch) => {
+  dispatch(removeChannelRequest());
+  try {
+    const { removeChannelUrl } = routes;
+    await axios.delete(removeChannelUrl(channelId));
+    dispatch(removeChannelSuccess());
+    dispatch(closeModal());
+  } catch (e) {
+    dispatch(removeChannelFailure());
+  }
+};

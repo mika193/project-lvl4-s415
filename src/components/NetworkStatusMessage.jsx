@@ -1,6 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Detector } from 'react-detect-offline';
+import connect from '../connect';
 
 const mapStateToProps = (state) => {
   const { socketConnectionStatus } = state;

@@ -1,10 +1,7 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import { connect } from 'react-redux';
-import axios from 'axios';
 import { Field, reduxForm, SubmissionError } from 'redux-form';
-import * as actions from '../../actions';
-import { renameChannelUrl } from '../../routes';
+import connect from '../../connect';
 import { getCurrentChannelName } from '../../selectors';
 
 const mapStateToProps = (state) => {
@@ -13,14 +10,10 @@ const mapStateToProps = (state) => {
   return { channelName, currentChannelId };
 };
 
-const actionCreators = {
-  closeModal: actions.closeModal,
-};
-
 @reduxForm({
   form: 'renameChannel',
 })
-@connect(mapStateToProps, actionCreators)
+@connect(mapStateToProps)
 class RenameChannel extends React.Component {
   componentDidMount() {
     this.focusField();
@@ -44,7 +37,7 @@ class RenameChannel extends React.Component {
   }
 
   renameChannel = async (values) => {
-    const { reset, closeModal, currentChannelId } = this.props;
+    const { reset, makeRenameChannelRequest, currentChannelId } = this.props;
     const { channel } = values;
     const data = {
       data: {
@@ -53,9 +46,8 @@ class RenameChannel extends React.Component {
     };
 
     try {
-      await axios.patch(renameChannelUrl(currentChannelId), data);
+      await makeRenameChannelRequest(currentChannelId, data);
       reset();
-      closeModal();
     } catch (err) {
       throw new SubmissionError({ _error: err.message });
     }

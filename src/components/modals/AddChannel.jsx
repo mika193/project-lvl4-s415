@@ -1,21 +1,14 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import { connect } from 'react-redux';
-import axios from 'axios';
 import { Field, reduxForm, SubmissionError } from 'redux-form';
-import * as actions from '../../actions';
-import { addChannelUrl } from '../../routes';
+import connect from '../../connect';
 
 const mapStateToProps = state => state;
-
-const actionCreators = {
-  closeModal: actions.closeModal,
-};
 
 @reduxForm({
   form: 'addChannel',
 })
-@connect(mapStateToProps, actionCreators)
+@connect(mapStateToProps)
 class AddChannel extends React.Component {
   componentDidMount() {
     this.focusField();
@@ -27,6 +20,7 @@ class AddChannel extends React.Component {
 
   focusField = () => {
     if (this.input) {
+      console.log(this.input);
       const field = this.input.getRenderedComponent();
       field.focus();
     }
@@ -39,7 +33,7 @@ class AddChannel extends React.Component {
   }
 
   addChannel = async (values) => {
-    const { reset, closeModal } = this.props;
+    const { reset, makeAddChannelRequest } = this.props;
     const { channel } = values;
     const data = {
       data: {
@@ -48,9 +42,8 @@ class AddChannel extends React.Component {
     };
 
     try {
-      await axios.post(addChannelUrl(), data);
+      await makeAddChannelRequest(data);
       reset();
-      closeModal();
     } catch (err) {
       throw new SubmissionError({ _error: err.message });
     }
