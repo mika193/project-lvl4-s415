@@ -20,7 +20,6 @@ class AddChannel extends React.Component {
 
   focusField = () => {
     if (this.input) {
-      console.log(this.input);
       const field = this.input.getRenderedComponent();
       field.focus();
     }
