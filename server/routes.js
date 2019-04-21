@@ -59,7 +59,6 @@ export default (router, io) => {
     .patch('/channels/:id', (ctx) => {
       const channelId = Number(ctx.params.id);
       const channel = state.channels.find(c => c.id === channelId);
-      console.log('patch');
       const { attributes } = ctx.request.body.data;
       channel.name = attributes.name;
       ctx.status = 204;
